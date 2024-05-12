@@ -1,11 +1,11 @@
-package com.soup.can
+package com.lambda
 
 import com.lambda.Lambda.LOG
 import com.lambda.command.CommandManager.commands
 import com.lambda.module.ModuleRegistry.modules
 import com.lambda.plugin.api.Plugin
-import com.soup.can.modules.Messager
-import com.soup.can.modules.Range
+import com.lambda.modules.Messager
+import com.lambda.modules.Range
 
 internal object ExamplePlugin : Plugin(
     name = "Example",

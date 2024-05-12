@@ -1,4 +1,4 @@
-package com.soup.can;
+package com.lambda;
 
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;

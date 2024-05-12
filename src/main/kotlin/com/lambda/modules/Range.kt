@@ -1,4 +1,4 @@
-package com.soup.can.modules
+package com.lambda.modules
 
 import com.lambda.event.events.TickEvent
 import com.lambda.event.listener.SafeListener.Companion.listener

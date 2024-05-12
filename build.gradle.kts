@@ -87,7 +87,7 @@ java {
 tasks {
     jar {
         manifest {
-            attributes["Main-Class"] = "com.soup.can.ExamplePlugin"
+            attributes["Main-Class"] = "com.lambda.ExamplePlugin"
         }
     }
 }

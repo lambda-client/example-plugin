@@ -1,4 +1,4 @@
-package com.soup.can.modules
+package com.lambda.modules
 
 import com.lambda.module.Module
 import com.lambda.module.tag.ModuleTag
