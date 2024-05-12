@@ -2,6 +2,7 @@ package com.lambda
 
 import com.lambda.Lambda.LOG
 import com.lambda.command.CommandManager.commands
+import com.lambda.commands.Time
 import com.lambda.module.ModuleRegistry.modules
 import com.lambda.plugin.api.Plugin
 import com.lambda.modules.Messager
@@ -21,6 +22,6 @@ internal object ExamplePlugin : Plugin(
         modules.add(Range)
 
         // Register commands
-        // commands.add(...)
+        commands.add(Time)
     }
 }

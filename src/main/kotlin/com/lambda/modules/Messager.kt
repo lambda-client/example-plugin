@@ -14,7 +14,7 @@ object Messager : Module(
     init {
         onEnable {
             val text = buildText {
-                literal("Hello, this is a message from the Messager module")
+                literal("Here is a fun video!")
                 clickEvent(ClickEvents.openUrl("https://www.youtube.com/watch?v=RvVdFXOFcjw")) {
                     color(Color.GREEN) {
                         literal(" (Click me!)")
