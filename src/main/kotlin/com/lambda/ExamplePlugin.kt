@@ -24,4 +24,8 @@ internal object ExamplePlugin : Plugin(
         // Register commands
         commands.add(Time)
     }
+
+    override fun preLoad() {
+        LOG.info("The Plugin is being preloaded...")
+    }
 }

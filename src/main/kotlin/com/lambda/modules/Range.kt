@@ -36,7 +36,7 @@ object Range : Module(
         // - Click on "AW Reference"
         // - Paste the reference in the access widener file
         // - Click the refresh arrows in the Gradle tool window
-        // val onFire = entity.hasVisualFire // The line as been commented because runtime AW/AT are not supported yet
+        val onFire = entity.hasVisualFire // The line as been commented because runtime AW/AT are not supported yet
         println(entity)
     }
 
