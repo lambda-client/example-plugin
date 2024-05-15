@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "Lambda",
+  "description": "${mod_description}",
+  "authors": [
+    "You"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+  "license": "GNU General Public License v3.0",
+  "icon": "assets/example/example.png",
+  "environment": "client",
+  "mixins": [
+    "example.mixins.common.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.1",
+    "fabric-api": ">=0.91.3+1.20.4",
+    "minecraft": "1.20.4",
+    "java": ">=17"
+  }
+}

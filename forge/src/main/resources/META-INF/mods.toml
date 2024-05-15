@@ -1,0 +1,14 @@
+modLoader="lowcodefml" # We are forced to provide a mod loader even though we don't use it
+loaderVersion="[46,)"
+
+license = "GNU General Public License v3.0" # Do not change this
+issueTrackerURL = "https://github.com/.../.../issues" # Change this to your issue tracker
+
+[[mods]]
+modId = "exampleplugin"
+version = "${mod_version}"
+displayName = "Example Plugin"
+authors = "${authors}"
+description = "${mod_description}"
+logoFile = "" # Change this to the path of your logo file, relative to the root of resources
+displayTest = "IGNORE_ALL_VERSION"

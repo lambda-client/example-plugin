@@ -1,0 +1,55 @@
+val fabricLoaderVersion = property("fabric_loader_version").toString()
+val minecraftVersion = property("minecraft_version").toString()
+val yarnMappings = property("yarn_mappings").toString()
+val kotlinVersion = property("kotlin_version").toString()
+
+// Please note that this also works on other mod loaders such
+// as Quilt and NeoForge, or any mod loaders which are supersets
+// of the said loaders
+architectury { common("fabric", "forge") }
+
+loom {
+    silentMojangMappingsLicense()
+    accessWidenerPath = File("src/main/resources/example.accesswidener")
+}
+
+dependencies {
+    // We depend on fabric loader here to use the fabric
+    // @Environment annotations and get the mixin dependencies
+    // You CANNOT use classes from the fabric loader
+    // as they are not available at runtime
+    modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
+
+    // This is the library we use for reflections
+    // You most likely will not need to use it so,
+    // you can comment the line or remove it entirely.
+    //
+    // This library allows us to scan the classpath
+    // for classes.
+    //
+    // If you are new to programming or new to Java
+    // you may want to read this article on the classpath:
+    // https://medium.com/javarevisited/back-to-the-basics-of-java-part-1-classpath-47cf3f834ff
+    implementation("org.reflections:reflections:0.10.2")
+
+    // Add Kotlin
+    // If you wish to use additional Kotlin features, you can add them here
+    // You do not need to include them in the final jar since we are using
+    // Kotlin mod loaders which already include them.
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+}
+
+loom.accessWidenerPath = file("src/main/resources/example.accesswidener") // TODO
+
+tasks {
+    jar {
+        manifest {
+            attributes["Main-Class"] = "com.lambda.ExamplePlugin"
+        }
+    }
+
+    // Prevent recursive libraries
+    remapJar {
+        enabled = false
+    }
+}

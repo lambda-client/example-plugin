@@ -1,111 +1,103 @@
-val fabricLoaderVersion = property("fabric_loader_version").toString()
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.fabricmc.loom.task.RemapJarTask
+import java.util.*
+
+val modId = property("mod_id").toString()
+val modVersion = property("mod_version").toString()
+val mavenGroup = property("maven_group").toString()
 val minecraftVersion = property("minecraft_version").toString()
 val yarnMappings = property("yarn_mappings").toString()
-val lambdaVersion = property("lambda_version").toString()
-val fabricApiVersion = property("fabric_api_version").toString()
-val kotlinFabricVersion = property("kotlin_fabric_version").toString()
-val mixinExtrasVersion = property("mixinextras_version").toString()
+
+// The next two lines are used to replace the version in the fabric.mod.json and META-INF/*.toml files
+// You most likely don't want to touch this
+val targets = listOf("META-INF/*.toml", "fabric.mod.json")
+val replacements = file("gradle.properties").inputStream().use { stream ->
+    Properties().apply { load(stream) }
+}.map { (k, v) -> k.toString() to v.toString() }.toMap()
+
+// This is the directory where you can put local libraries that will get indexed by Gradle
+val libs = file("libs")
 
 plugins {
     kotlin("jvm") version "1.9.24"
-    id("fabric-loom") version "1.6-SNAPSHOT" // Used for Minecraft mappings
+    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
-apply(plugin = "java")
-apply(plugin = "org.jetbrains.kotlin.jvm")
+architectury {
+    minecraft = minecraftVersion
+}
 
-group = "com.soup.can"
-version = "1.0-SNAPSHOT"
+subprojects {
+    apply(plugin = "dev.architectury.loom")
 
-val libs = file("libs")
+    dependencies {
+        // I'm not sure why we have to use "" here, but it works, if you manage to get it to work without it, please let us know.
+        "minecraft"("com.mojang:minecraft:$minecraftVersion")
+        "mappings"("net.fabricmc:yarn:$minecraftVersion+$yarnMappings:v2")
+    }
 
-repositories {
-    mavenCentral()
+    if (path == ":common") return@subprojects
 
-    flatDir {
-        dirs(libs)
+    apply(plugin = "com.github.johnrengelman.shadow")
+
+    val versionWithMCVersion = "$modVersion+$minecraftVersion"
+
+    tasks {
+        val shadowCommon by configurations.creating {
+            isCanBeConsumed = false
+            isCanBeResolved = true
+        }
+
+        val shadow = named<ShadowJar>("shadowJar") {
+            archiveVersion = versionWithMCVersion
+            archiveClassifier.set("shadow")
+            configurations = listOf(shadowCommon)
+        }
+
+        named<RemapJarTask>("remapJar") {
+            dependsOn(shadow)
+            inputFile = shadow.flatMap { it.archiveFile }
+            archiveVersion = versionWithMCVersion
+            archiveClassifier = ""
+        }
+
+        jar {
+            enabled = false
+        }
+
+        processResources {
+            // Replaces placeholders in the mod info files
+            filesMatching(targets) {
+                expand(replacements)
+            }
+        }
     }
 }
 
-// Include a Non-MC library inside the final jar
-val includeLib: Configuration by configurations.creating
+allprojects {
+    apply(plugin = "java")
+    apply(plugin = "architectury-plugin")
 
-// Include a MC library inside the final jar
-val includeMod: Configuration by configurations.creating
+    group = mavenGroup
+    version = modVersion
 
-fun DependencyHandlerScope.setupConfigurations() {
-    includeLib.dependencies.forEach {
-        implementation(it)
-        include(it)
-    }
+    base.archivesName = "$modId-$modVersion"
 
-    includeMod.dependencies.forEach {
-        implementation(it)
-        include(it)
-    }
-}
+    repositories {
+        // Here you can add repositories for your dependencies
+        // They will be applied on all projects
 
-dependencies {
-    minecraft("com.mojang:minecraft:$minecraftVersion")
-    mappings("net.fabricmc:yarn:$minecraftVersion+$yarnMappings:v2")
-
-    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
-    // You CANNOT use classes from the fabric loader
-    // as they are not available at runtime
-    modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
-
-    // Lambda (Do not touch, do not use, do not look at)
-    // The dependency below, except for lambda fabric, are REQUIRED
-    // to launch the game inside the development environment.
-    // They are not included in the final jar.
-    modImplementation("com.lambda:lambda-fabric-$lambdaVersion+$minecraftVersion")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion+$minecraftVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion")
-    implementation("org.reflections:reflections:0.10.2")
-    implementation("org.javassist:javassist:3.28.0-GA")
-
-    // Add dependencies on the required Kotlin modules.
-    // They will be included in the final jar.
-    // includeLib(...)
-    //
-    // Example:
-    // includeLib("org.reflections:reflections:0.10.2")
-
-    // Add mods to the mod jar
-    // They will be included in the final jar.
-    // includeMod(...)
-    //
-    // Example:
-    // includeMod("baritone-api:baritone-unoptimized-fabric:1.10.2")
-
-    // Add Kotlin
-    implementation(kotlin("stdlib"))
-
-    // Extra Mixins
-    implementation("io.github.llamalad7:mixinextras-forge:$mixinExtrasVersion")
-}
-
-loom.accessWidenerPath = file("src/main/resources/example.accesswidener") // TODO
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-tasks {
-    jar {
-        manifest {
-            attributes["Main-Class"] = "com.lambda.ExamplePlugin"
+        flatDir {
+            dirs(libs)
         }
     }
 
-    /*create<Copy>("copyPlugin") {
-        dependsOn("build")
+    java {
+        withSourcesJar() // This will create a sources jar for your project, allowing you to publish it to Maven repositories
 
-        // This will export the plugin to the plugins folder
-        // This is only for development purposes
-        from(buildFile) {
-            into("/run/lambda/plugins")
-        }
-    }*/
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }

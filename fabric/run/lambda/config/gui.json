@@ -1,0 +1,17 @@
+{
+  "gui": {
+    "windows": [
+      {
+        "title": "Untitled",
+        "tags": [],
+        "width": 110.0,
+        "height": 300.0,
+        "isOpen": true,
+        "position": [
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  }
+}
