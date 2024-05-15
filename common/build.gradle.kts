@@ -42,12 +42,6 @@ dependencies {
 loom.accessWidenerPath = file("src/main/resources/example.accesswidener") // TODO
 
 tasks {
-    jar {
-        manifest {
-            attributes["Main-Class"] = "com.lambda.ExamplePlugin"
-        }
-    }
-
     // Prevent recursive libraries
     remapJar {
         enabled = false

@@ -83,7 +83,7 @@ allprojects {
     group = mavenGroup
     version = modVersion
 
-    base.archivesName = "$modId-$modVersion"
+    base.archivesName = modId
 
     repositories {
         // Here you can add repositories for your dependencies
@@ -91,6 +91,15 @@ allprojects {
 
         flatDir {
             dirs(libs)
+        }
+    }
+
+    tasks {
+        jar {
+            manifest {
+                attributes["Main-Class"] = "com.example.ExamplePlugin"
+                attributes["Lambda-Plugin"] = "true"
+            }
         }
     }
 
