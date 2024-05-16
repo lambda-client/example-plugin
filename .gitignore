@@ -44,3 +44,7 @@ bin/
 
 ### Minecraft ###
 run/
+logs/
+
+### Architectury ###
+.architectury-transformer/
