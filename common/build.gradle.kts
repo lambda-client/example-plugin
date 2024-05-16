@@ -20,6 +20,9 @@ dependencies {
     // as they are not available at runtime
     modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
 
+    // Lambda (Do not touch)
+    modImplementation("com.lambda:lambda-1.0.0")
+
     // This is the library we use for reflections
     // You most likely will not need to use it so,
     // you can comment the line or remove it entirely.
@@ -37,13 +40,4 @@ dependencies {
     // You do not need to include them in the final jar since we are using
     // Kotlin mod loaders which already include them.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-}
-
-loom.accessWidenerPath = file("src/main/resources/example.accesswidener") // TODO
-
-tasks {
-    // Prevent recursive libraries
-    remapJar {
-        enabled = false
-    }
 }

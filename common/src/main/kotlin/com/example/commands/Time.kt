@@ -1,4 +1,4 @@
-package com.lambda.commands
+package com.example.commands
 
 import com.lambda.brigadier.argument.time
 import com.lambda.brigadier.argument.value

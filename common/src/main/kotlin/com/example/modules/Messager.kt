@@ -1,4 +1,4 @@
-package com.lambda.modules
+package com.example.modules
 
 import com.lambda.module.Module
 import com.lambda.module.tag.ModuleTag

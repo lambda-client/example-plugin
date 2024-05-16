@@ -79,6 +79,7 @@ subprojects {
 allprojects {
     apply(plugin = "java")
     apply(plugin = "architectury-plugin")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = mavenGroup
     version = modVersion
@@ -86,9 +87,6 @@ allprojects {
     base.archivesName = modId
 
     repositories {
-        // Here you can add repositories for your dependencies
-        // They will be applied on all projects
-
         flatDir {
             dirs(libs)
         }
