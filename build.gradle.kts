@@ -52,23 +52,37 @@ subprojects {
 
         val shadow = named<ShadowJar>("shadowJar") {
             archiveVersion = versionWithMCVersion
-            archiveClassifier.set("shadow")
+            archiveClassifier = "shadow"
             configurations = listOf(shadowCommon)
         }
 
-        named<RemapJarTask>("remapJar") {
+        val remapJar = named<RemapJarTask>("remapJar") {
             dependsOn(shadow)
             inputFile = shadow.flatMap { it.archiveFile }
             archiveVersion = versionWithMCVersion
             archiveClassifier = ""
         }
 
-        jar {
-            enabled = false
+        // This allows us to make the plugin discoverable by Lambda
+        val linkJar by creating(Copy::class) {
+            dependsOn(remapJar)
+
+            val outputDir = file("/run/mods/")
+            outputDir.mkdirs()
+
+            val jarFile = file(
+                "build/libs/${modId}-${remapJar.get().archiveFile.get().asFile.name}")
+
+            from(jarFile)
+            into(outputDir.toPath())
+        }
+
+        build {
+            dependsOn(linkJar)
         }
 
         processResources {
-            // Replaces placeholders in the mod info files
+            // This task will replace the placeholders in the fabric.mod.json and META-INF/*.toml files
             filesMatching(targets) {
                 expand(replacements)
             }
