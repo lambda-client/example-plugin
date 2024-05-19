@@ -1,8 +1,8 @@
-val lambdaVersion = property("lambda_version").toString()
-val minecraftVersion = property("minecraft_version").toString()
-val forgeVersion = property("forge_version").toString()
-val mixinExtrasVersion = property("mixinextras_version").toString()
-val kotlinForgeVersion = property("kotlin_forge_version").toString()
+val lambdaVersion: String by project
+val minecraftVersion: String by project
+val forgeVersion: String by project
+val mixinExtrasVersion: String by project
+val kotlinForgeVersion: String by project
 
 base.archivesName = "${base.archivesName.get()}-forge"
 
@@ -79,13 +79,13 @@ fun DependencyHandlerScope.setupConfigurations() {
 
 dependencies {
     // Forge API (Do not touch)
-    forge("net.minecraftforge:forge:$forgeVersion")
+    forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
 
     // Lambda (Do not touch)
     // The dependency below, except for lambda forge, are REQUIRED
     // to launch the game inside the development environment.
     modImplementation("com.lambda:lambda-forge-$lambdaVersion+$minecraftVersion") { isTransitive = false }
-    modImplementation("thedarkcolour:kotlinforforge:$kotlinForgeVersion")
+    modImplementation("thedarkcolour:kotlinforforge:$kotlinForgeVersion") // FixMe: Stupid forge
     implementation("org.reflections:reflections:0.10.2")
 
     // Add dependencies on the required Kotlin modules.
@@ -111,13 +111,4 @@ dependencies {
 
     // Finish the configuration
     setupConfigurations()
-}
-
-tasks {
-    remapJar {
-        // Access wideners are the successor of the mixins accessor
-        // that were used in the past to access private fields and methods.
-        // They allow you to make field, method, and class access public.
-        injectAccessWidener = true
-    }
 }

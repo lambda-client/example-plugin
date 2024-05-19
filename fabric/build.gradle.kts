@@ -1,8 +1,8 @@
-val lambdaVersion = property("lambda_version").toString()
-val minecraftVersion = property("minecraft_version").toString()
-val fabricLoaderVersion = property("fabric_loader_version").toString()
-val fabricApiVersion = property("fabric_api_version").toString()
-val kotlinFabricVersion = property("kotlin_fabric_version").toString()
+val lambdaVersion: String by project
+val minecraftVersion: String by project
+val fabricLoaderVersion: String by project
+val fabricApiVersion: String by project
+val kotlinFabricVersion: String by project
 
 base.archivesName = "${base.archivesName.get()}-fabric"
 

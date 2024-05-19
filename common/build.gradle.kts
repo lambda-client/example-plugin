@@ -1,7 +1,8 @@
-val fabricLoaderVersion = property("fabric_loader_version").toString()
-val minecraftVersion = property("minecraft_version").toString()
-val yarnMappings = property("yarn_mappings").toString()
-val kotlinVersion = property("kotlin_version").toString()
+val modId: String by project
+val fabricLoaderVersion: String by project
+val minecraftVersion: String by project
+val yarnMappings: String by project
+val kotlinVersion: String by project
 
 // Please note that this also works on other mod loaders such
 // as Quilt and NeoForge, or any mod loaders which are supersets
@@ -10,7 +11,7 @@ architectury { common("fabric", "forge") }
 
 loom {
     silentMojangMappingsLicense()
-    accessWidenerPath = File("src/main/resources/example.accesswidener")
+    accessWidenerPath = File("src/main/resources/$modId.accesswidener")
 }
 
 dependencies {

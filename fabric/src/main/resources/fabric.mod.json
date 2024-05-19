@@ -1,12 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}",
-  "version": "${mod_version}",
+  "id": "${modId}",
+  "version": "${modVersion}",
   "name": "Lambda",
-  "description": "${mod_description}",
-  "authors": [
-    "You"
-  ],
+  "description": "${modDescription}",
+  "authors": ["${modAuthors}"],
   "contact": {
     "homepage": "",
     "sources": ""
@@ -14,13 +12,23 @@
   "license": "GNU General Public License v3.0",
   "icon": "assets/example/example.png",
   "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.example.fabric.ExampleFabric"
+      }
+    ]
+  },
   "mixins": [
     "example.mixins.common.json"
   ],
   "depends": {
+    "lambda": "${lambdaVersion}",
     "fabricloader": ">=0.15.1",
     "fabric-api": ">=0.91.3+1.20.4",
-    "minecraft": "1.20.4",
+    "minecraft": "${minecraftVersion}",
+    "fabric-language-kotlin": ">=${kotlinFabricVersion}",
     "java": ">=17"
   }
 }

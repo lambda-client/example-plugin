@@ -1,16 +1,18 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import net.fabricmc.loom.task.RemapJarTask
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import java.util.*
 
-val modId = property("mod_id").toString()
-val modVersion = property("mod_version").toString()
-val mavenGroup = property("maven_group").toString()
-val minecraftVersion = property("minecraft_version").toString()
-val yarnMappings = property("yarn_mappings").toString()
+val modId: String by project
+val modVersion: String by project
+val mavenGroup: String by project
+val minecraftVersion: String by project
+val yarnMappings: String by project
+val mainClass: String by project
 
 // The next two lines are used to replace the version in the fabric.mod.json and META-INF/*.toml files
 // You most likely don't want to touch this
-val targets = listOf("META-INF/*.toml", "fabric.mod.json")
+val targets = listOf("META-INF/*.toml", "fabric.mod.json", mainClass.replace(".", "/") + ".class")
 val replacements = file("gradle.properties").inputStream().use { stream ->
     Properties().apply { load(stream) }
 }.map { (k, v) -> k.toString() to v.toString() }.toMap()
