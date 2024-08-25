@@ -8,14 +8,11 @@ base.archivesName = "${base.archivesName.get()}-forge"
 
 architectury {
     platformSetupLoomIde()
-
-    // Tells Architectury to use the Forge mod loader.
     forge()
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
+    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
     forge {
         // This is required to convert the access wideners to the forge
         // format, access transformers.
@@ -33,10 +30,12 @@ loom {
 repositories {
     // You can add more repositories here if you plan
     // on using environment-specific dependencies.
-    // If you simply want to add a global repository,
+    // If you simply want to add a global plugin repository,
     // you can add it to the `settings.gradle.kts` file
     // in the base of the project and gradle will do the
     // rest for you.
+    // If you want to add more global repositories, you can
+    // add them to the root build.gradle.kts file.
     maven("https://thedarkcolour.github.io/KotlinForForge/")
 }
 
@@ -48,13 +47,13 @@ val common: Configuration by configurations.creating {
     isCanBeConsumed = false
 }
 
-// Include a Non-MC library inside the final jar
+// Include a non-minecraft library in the final jar
 val includeLib: Configuration by configurations.creating
 
-// Include an MC library inside the final jar
+// Include a mod in the final jar
 val includeMod: Configuration by configurations.creating
 
-// Include a library inside the final jar
+// The shadow bundle is the final jar that is produced by the shadow plugin.
 val shadowBundle: Configuration by configurations.creating {
     isCanBeResolved = true
     isCanBeConsumed = false
@@ -62,18 +61,13 @@ val shadowBundle: Configuration by configurations.creating {
 
 fun DependencyHandlerScope.setupConfigurations() {
     includeLib.dependencies.forEach {
-        forgeRuntimeLibrary(it)
+        implementation(it)
         include(it)
     }
 
     includeMod.dependencies.forEach {
-        forgeRuntimeLibrary(it)
+        modImplementation(it)
         include(it)
-    }
-
-    shadowBundle.dependencies.forEach {
-        shadowCommon(it)
-        shadow(it)
     }
 }
 
@@ -82,23 +76,14 @@ dependencies {
     forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
 
     // Lambda (Do not touch)
-    // The dependency below, except for lambda forge, are REQUIRED
-    // to launch the game inside the development environment.
-    modImplementation("com.lambda:lambda-forge-$lambdaVersion+$minecraftVersion") { isTransitive = false }
-    modImplementation("thedarkcolour:kotlinforforge:$kotlinForgeVersion") // FixMe: Stupid forge
-    implementation("org.reflections:reflections:0.10.2")
+    modImplementation("com.lambda:lambda-forge-$lambdaVersion+$minecraftVersion")
 
     // Add dependencies on the required Kotlin modules.
-    // includeLib(...)
-    //
-    // Example:
-    // includeLib("org.reflections:reflections:0.10.2")
+    includeLib("org.reflections:reflections:0.10.2")
+    includeLib("org.javassist:javassist:3.28.0-GA")
 
     // Add mods to the mod jar
-    // includeMod(...)
-    //
-    // Example:
-    // includeMod("baritone-api:baritone-unoptimized-fabric:1.10.2")
+    includeMod("thedarkcolour:kotlinforforge:$kotlinForgeVersion")
 
     // MixinExtras is a library that adds useful mixins
     // for making complex mods easier to develop.
@@ -107,7 +92,7 @@ dependencies {
 
     // Common (Do not touch)
     common(project(":common", configuration = "namedElements")) { isTransitive = false }
-    shadowBundle(project(":common", configuration = "transformProductionForge"))
+    shadowBundle(project(":common", configuration = "transformProductionForge")) { isTransitive = false }
 
     // Finish the configuration
     setupConfigurations()

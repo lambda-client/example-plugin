@@ -1,4 +1,5 @@
 val lambdaVersion: String by project
+val modVersion: String by project
 val minecraftVersion: String by project
 val fabricLoaderVersion: String by project
 val fabricApiVersion: String by project
@@ -6,16 +7,28 @@ val kotlinFabricVersion: String by project
 
 base.archivesName = "${base.archivesName.get()}-fabric"
 
+plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+}
+
 architectury {
     platformSetupLoomIde()
-
-    // Tells Architectury to use the Fabric mod loader.
     fabric()
 }
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
     enableTransitiveAccessWideners = true
+}
+
+repositories {
+    // You can add more repositories here if you plan
+    // on using environment-specific dependencies.
+    // If you simply want to add a global plugin repository,
+    // you can add it to the `settings.gradle.kts` file
+    // in the base of the project and gradle will do the
+    // rest for you.
+    // maven(...)
 }
 
 val common: Configuration by configurations.creating {
@@ -26,13 +39,13 @@ val common: Configuration by configurations.creating {
     isCanBeConsumed = false
 }
 
-// Include a Non-MC library inside the final jar
+// Include a non-minecraft library in the final jar
 val includeLib: Configuration by configurations.creating
 
-// Include an MC library inside the final jar
+// Include a mod in the final jar
 val includeMod: Configuration by configurations.creating
 
-// Include a library inside the final jar
+// The shadow bundle is the final jar that is produced by the shadow plugin.
 val shadowBundle: Configuration by configurations.creating {
     isCanBeResolved = true
     isCanBeConsumed = false
@@ -48,11 +61,6 @@ fun DependencyHandlerScope.setupConfigurations() {
         modImplementation(it)
         include(it)
     }
-
-    shadowBundle.dependencies.forEach {
-        shadowCommon(it)
-        shadow(it)
-    }
 }
 
 dependencies {
@@ -60,38 +68,41 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
 
     // Lambda (Do not touch)
-    // The dependency below, except for lambda fabric, are REQUIRED
-    // to launch the game inside the development environment.
-    modImplementation("com.lambda:lambda-fabric-$lambdaVersion+$minecraftVersion") { isTransitive = false }
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion+$minecraftVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion")
-    implementation("org.reflections:reflections:0.10.2")
+    modImplementation("com.lambda:lambda-fabric-$lambdaVersion+$minecraftVersion")
 
     // Add dependencies on the required Kotlin modules.
-    // includeLib(...)
-    //
-    // Example:
-    // includeLib("org.reflections:reflections:0.10.2")
+    //includeLib("org.reflections:reflections:0.10.2")
+    //includeLib("org.javassist:javassist:3.28.0-GA")
 
     // Add mods to the mod jar
-    // includeMod(...)
-    //
-    // Example:
-    // includeMod("baritone-api:baritone-unoptimized-fabric:1.10.2")
+    includeMod("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion+$minecraftVersion")
+    includeMod("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion")
 
     // Common (Do not touch)
     common(project(":common", configuration = "namedElements")) { isTransitive = false }
-    shadowBundle(project(":common", configuration = "transformProductionFabric"))
+    shadowBundle(project(":common", configuration = "transformProductionFabric")) { isTransitive = false }
 
     // Finish the configuration
     setupConfigurations()
 }
 
 tasks {
+    shadowJar {
+        archiveVersion = "$modVersion+$minecraftVersion"
+        configurations = listOf(shadowBundle)
+        archiveClassifier = "dev-shadow"
+    }
+
     remapJar {
+        dependsOn(shadowJar)
+
+        archiveVersion = "$modVersion+$minecraftVersion"
+        inputFile = shadowJar.get().archiveFile
+
         // Access wideners are the successor of the mixins accessor
         // that were used in the past to access private fields and methods.
         // They allow you to make field, method, and class access public.
         injectAccessWidener = true
     }
 }
+

@@ -10,7 +10,8 @@ pluginManagement {
     }
 }
 
-include("common")
+include("common") // This is your real project
 include("fabric") // Only used for the mod discovery
 include("forge") // Only used for the mod discovery
+include("neoforge") // Only used for the mod discovery
 

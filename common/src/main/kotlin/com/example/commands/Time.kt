@@ -6,7 +6,7 @@ import com.lambda.brigadier.execute
 import com.lambda.brigadier.required
 import com.lambda.command.LambdaCommand
 import com.lambda.util.Communication.info
-import com.lambda.util.primitives.extension.CommandBuilder
+import com.lambda.util.extension.CommandBuilder
 
 object Time : LambdaCommand(
     name = "time",

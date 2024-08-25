@@ -3,11 +3,9 @@ val fabricLoaderVersion: String by project
 val minecraftVersion: String by project
 val yarnMappings: String by project
 val kotlinVersion: String by project
+val lambdaVersion: String by project
 
-// Please note that this also works on other mod loaders such
-// as Quilt and NeoForge, or any mod loaders which are supersets
-// of the said loaders
-architectury { common("fabric", "forge") }
+architectury { common("fabric", "forge", "neoforge") }
 
 loom {
     silentMojangMappingsLicense()
@@ -22,7 +20,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
 
     // Lambda (Do not touch)
-    modImplementation("com.lambda:lambda-1.0.0")
+    modApi("com.lambda:lambda-$lambdaVersion")
 
     // This is the library we use for reflections
     // You most likely will not need to use it so,

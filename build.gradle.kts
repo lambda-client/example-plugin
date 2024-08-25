@@ -1,6 +1,4 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import net.fabricmc.loom.task.RemapJarTask
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.*
 
 val modId: String by project
@@ -12,7 +10,7 @@ val mainClass: String by project
 
 // The next two lines are used to replace the version in the fabric.mod.json and META-INF/*.toml files
 // You most likely don't want to touch this
-val targets = listOf("META-INF/*.toml", "fabric.mod.json", mainClass.replace(".", "/") + ".class")
+val targets = listOf("META-INF/*.toml", "fabric.mod.json")
 val replacements = file("gradle.properties").inputStream().use { stream ->
     Properties().apply { load(stream) }
 }.map { (k, v) -> k.toString() to v.toString() }.toMap()
@@ -21,9 +19,10 @@ val replacements = file("gradle.properties").inputStream().use { stream ->
 val libs = file("libs")
 
 plugins {
-    kotlin("jvm") version "1.9.24"
+    kotlin("jvm") version "2.0.20"
+    id("org.jetbrains.dokka") version "1.9.20" // If your mod doesn't have any documentation, you can remove this line
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 }
 
@@ -35,59 +34,21 @@ subprojects {
     apply(plugin = "dev.architectury.loom")
 
     dependencies {
-        // I'm not sure why we have to use "" here, but it works, if you manage to get it to work without it, please let us know.
         "minecraft"("com.mojang:minecraft:$minecraftVersion")
         "mappings"("net.fabricmc:yarn:$minecraftVersion+$yarnMappings:v2")
     }
 
     if (path == ":common") return@subprojects
 
-    apply(plugin = "com.github.johnrengelman.shadow")
-
-    val versionWithMCVersion = "$modVersion+$minecraftVersion"
-
     tasks {
-        val shadowCommon by configurations.creating {
-            isCanBeConsumed = false
-            isCanBeResolved = true
-        }
-
-        val shadow = named<ShadowJar>("shadowJar") {
-            archiveVersion = versionWithMCVersion
-            archiveClassifier = "shadow"
-            configurations = listOf(shadowCommon)
-        }
-
-        val remapJar = named<RemapJarTask>("remapJar") {
-            dependsOn(shadow)
-            inputFile = shadow.flatMap { it.archiveFile }
-            archiveVersion = versionWithMCVersion
-            archiveClassifier = ""
-        }
-
-        // This allows us to make the plugin discoverable by Lambda
-        val linkJar by creating(Copy::class) {
-            dependsOn(remapJar)
-
-            val outputDir = file("/run/mods/")
-            outputDir.mkdirs()
-
-            val jarFile = file(
-                "build/libs/${modId}-${remapJar.get().archiveFile.get().asFile.name}")
-
-            from(jarFile)
-            into(outputDir.toPath())
-        }
-
-        build {
-            dependsOn(linkJar)
-        }
-
         processResources {
-            // This task will replace the placeholders in the fabric.mod.json and META-INF/*.toml files
+            // Replaces placeholders in the mod info files
             filesMatching(targets) {
                 expand(replacements)
             }
+
+            // Forces the task to always run
+            outputs.upToDateWhen { false }
         }
     }
 }
@@ -95,6 +56,7 @@ subprojects {
 allprojects {
     apply(plugin = "java")
     apply(plugin = "architectury-plugin")
+    apply(plugin = "maven-publish")
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = mavenGroup
@@ -103,24 +65,24 @@ allprojects {
     base.archivesName = modId
 
     repositories {
+        // Allow the use of local libraries
         flatDir {
             dirs(libs)
         }
     }
 
-    tasks {
-        jar {
-            manifest {
-                attributes["Main-Class"] = "com.example.ExamplePlugin"
-                attributes["Lambda-Plugin"] = "true"
-            }
-        }
-    }
-
     java {
-        withSourcesJar() // This will create a sources jar for your project, allowing you to publish it to Maven repositories
+        withSourcesJar()
 
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    tasks {
+        compileKotlin {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
+            }
+        }
     }
 }
