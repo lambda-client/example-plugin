@@ -36,5 +36,5 @@ dependencies {
     // If you wish to use additional Kotlin features, you can add them here
     // You do not need to include them in the final jar since we are using
     // Kotlin mod loaders which already include them.
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 }
