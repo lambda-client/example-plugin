@@ -6,7 +6,6 @@ val modVersion: String by project
 val mavenGroup: String by project
 val minecraftVersion: String by project
 val yarnMappings: String by project
-val mainClass: String by project
 
 // The next two lines are used to replace the version in the fabric.mod.json and META-INF/*.toml files
 // You most likely don't want to touch this
@@ -32,6 +31,7 @@ architectury {
 
 subprojects {
     apply(plugin = "dev.architectury.loom")
+    apply(plugin = "org.jetbrains.dokka")
 
     dependencies {
         "minecraft"("com.mojang:minecraft:$minecraftVersion")
@@ -81,7 +81,7 @@ allprojects {
     tasks {
         compileKotlin {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_17)
+                jvmTarget = JvmTarget.JVM_17
             }
         }
     }
