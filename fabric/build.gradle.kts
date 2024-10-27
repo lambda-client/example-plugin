@@ -2,8 +2,6 @@ val lambdaVersion: String by project
 val modVersion: String by project
 val minecraftVersion: String by project
 val fabricLoaderVersion: String by project
-val fabricApiVersion: String by project
-val kotlinFabricVersion: String by project
 
 base.archivesName = "${base.archivesName.get()}-fabric"
 

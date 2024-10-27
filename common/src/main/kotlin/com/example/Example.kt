@@ -6,9 +6,7 @@ import com.example.modules.Range
 import com.lambda.command.CommandRegistry
 import com.lambda.core.registry.AgnosticRegistries
 import com.lambda.module.ModuleRegistry
-import net.minecraft.entity.EntityType
 import net.minecraft.registry.Registries
-import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Identifier
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger

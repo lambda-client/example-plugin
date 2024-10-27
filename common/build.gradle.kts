@@ -1,6 +1,5 @@
 val modId: String by project
 val fabricLoaderVersion: String by project
-val kotlinVersion: String by project
 val lambdaVersion: String by project
 val minecraftVersion: String by project
 

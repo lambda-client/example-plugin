@@ -1,8 +1,6 @@
 val lambdaVersion: String by project
 val minecraftVersion: String by project
 val forgeVersion: String by project
-val mixinExtrasVersion: String by project
-val kotlinForgeVersion: String by project
 
 base.archivesName = "${base.archivesName.get()}-forge"
 
