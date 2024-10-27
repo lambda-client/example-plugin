@@ -68,15 +68,13 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
 
     // Lambda (Do not touch)
-    modImplementation("com.lambda:lambda-fabric-$lambdaVersion+$minecraftVersion")
+    modImplementation("com.lambda:lambda-fabric:$lambdaVersion+$minecraftVersion")
 
     // Add dependencies on the required Kotlin modules.
-    //includeLib("org.reflections:reflections:0.10.2")
-    //includeLib("org.javassist:javassist:3.28.0-GA")
+    // includeLib(...)
 
     // Add mods to the mod jar
-    includeMod("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion+$minecraftVersion")
-    includeMod("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion")
+    // includeMod(...)
 
     // Common (Do not touch)
     common(project(":common", configuration = "namedElements")) { isTransitive = false }

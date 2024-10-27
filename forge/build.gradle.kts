@@ -76,19 +76,13 @@ dependencies {
     forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
 
     // Lambda (Do not touch)
-    modImplementation("com.lambda:lambda-forge-$lambdaVersion+$minecraftVersion")
+    modImplementation("com.lambda:lambda-forge:$lambdaVersion+$minecraftVersion")
 
     // Add dependencies on the required Kotlin modules.
-    includeLib("org.reflections:reflections:0.10.2")
-    includeLib("org.javassist:javassist:3.28.0-GA")
+    // includeLib(...)
 
     // Add mods to the mod jar
-    includeMod("thedarkcolour:kotlinforforge:$kotlinForgeVersion")
-
-    // MixinExtras is a library that adds useful mixins
-    // for making complex mods easier to develop.
-    implementation("io.github.llamalad7:mixinextras-forge:$mixinExtrasVersion")
-    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:$mixinExtrasVersion")!!)
+    // includeMod(...)
 
     // Common (Do not touch)
     common(project(":common", configuration = "namedElements")) { isTransitive = false }

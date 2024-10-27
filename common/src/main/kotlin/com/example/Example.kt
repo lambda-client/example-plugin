@@ -4,7 +4,7 @@ import com.example.commands.Time
 import com.example.modules.Messager
 import com.example.modules.Range
 import com.lambda.command.CommandRegistry
-import com.lambda.core.registry.RegistryController
+import com.lambda.core.registry.AgnosticRegistries
 import com.lambda.module.ModuleRegistry
 import net.minecraft.entity.EntityType
 import net.minecraft.registry.Registries
@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import com.mojang.blaze3d.systems.RenderSystem.recordRenderCall
+import net.minecraft.sound.SoundEvent
 
 object Example {
     const val MOD_NAME = "Example"
@@ -33,8 +34,7 @@ object Example {
             // The RegistryController is an object that allows you to register custom resources
             // on any loaders.
             // Once they are dumped into their respective registries, you cannot add more.
-            RegistryController.register(Registries.SOUND_EVENT, Identifier(MOD_ID, "example_sound"), SoundEvents.BLOCK_MOSS_HIT)
-            RegistryController.register(Registries.ENTITY_TYPE, Identifier(MOD_ID, "example_entity_type"), EntityType.EGG)
+            AgnosticRegistries.register(Registries.SOUND_EVENT, Identifier(MOD_ID, "example_sound"), SoundEvent.of(Identifier(MOD_ID, "example_sound")))
 
             LOG.info("Plugin $MOD_NAME $VERSION initialized.")
         }

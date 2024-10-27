@@ -56,7 +56,6 @@ subprojects {
 allprojects {
     apply(plugin = "java")
     apply(plugin = "architectury-plugin")
-    apply(plugin = "maven-publish")
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = mavenGroup
@@ -65,6 +64,11 @@ allprojects {
     base.archivesName = modId
 
     repositories {
+        mavenLocal() // Allow the use of local repositories
+        mavenCentral()
+        maven("https://babbaj.github.io/maven/") // Baritone
+        maven("https://jitpack.io") // KDiscordIPC
+
         // Allow the use of local libraries
         flatDir {
             dirs(libs)
