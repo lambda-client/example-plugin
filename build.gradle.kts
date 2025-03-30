@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.*
 
@@ -68,6 +71,7 @@ allprojects {
         mavenCentral()
         maven("https://babbaj.github.io/maven/") // Baritone
         maven("https://jitpack.io") // KDiscordIPC
+        maven("https://maven.lambda-client.org/lambda")
 
         // Allow the use of local libraries
         flatDir {

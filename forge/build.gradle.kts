@@ -1,8 +1,14 @@
 val lambdaVersion: String by project
+val modId: String by project
+val modVersion: String by project
 val minecraftVersion: String by project
 val forgeVersion: String by project
 
 base.archivesName = "${base.archivesName.get()}-forge"
+
+plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+}
 
 architectury {
     platformSetupLoomIde()
@@ -88,4 +94,19 @@ dependencies {
 
     // Finish the configuration
     setupConfigurations()
+}
+
+tasks {
+    shadowJar {
+        archiveVersion = "$modVersion+$minecraftVersion"
+        configurations = listOf(shadowBundle)
+        archiveClassifier = "dev-shadow"
+    }
+
+    remapJar {
+        dependsOn(shadowJar)
+
+        archiveVersion = "$modVersion+$minecraftVersion"
+        inputFile = shadowJar.get().archiveFile
+    }
 }
