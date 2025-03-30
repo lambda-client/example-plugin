@@ -1,7 +1,7 @@
 package com.example.modules
 
 import com.lambda.event.events.TickEvent
-import com.lambda.event.listener.SafeListener.Companion.listener
+import com.lambda.event.listener.SafeListener.Companion.listen
 import com.lambda.module.Module
 import com.lambda.module.tag.ModuleTag
 import com.lambda.util.world.entitySearch
@@ -30,7 +30,7 @@ object Range : Module(
     }
 
     init {
-        listener<TickEvent.Pre> {
+        listen<TickEvent.Pre> {
             entitySearch<Entity>(range)
                 .forEach {
                     iterator(it)
