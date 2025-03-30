@@ -1,36 +1,35 @@
-modLoader="kotlinforforge" # We are forced to provide a mod loader even though we don't use it
+modLoader="kotlinforforge"
 loaderVersion="[${kotlinForgeVersion},)"
-
 license = "GNU General Public License v3.0" # Do not change this
 issueTrackerURL = "https://github.com/.../.../issues" # Change this to your issue tracker
 
 [[mods]]
 modId = "${modId}"
 version = "${modVersion}"
-displayName = "Example Plugin"
+displayName = "${modName}"
 authors = "${modAuthors}"
 description = "${modDescription}"
-logoFile = "assets/example/example.png"
+logoFile = "${modIcon}"
 displayTest = "IGNORE_ALL_VERSION"
 
 [[dependencies.${modId}]]
 modId = "forge"
 mandatory = true
-versionRange = "[${forgeVersion},)"
+versionRange = "[${forgeVersionMin},${forgeVersionMax}]"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.${modId}]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[${minecraftVersion},)"
+versionRange = "[${minecraftVersionMin},${minecraftVersionMax}]"
 ordering = "NONE"
 side = "CLIENT"
 
 [[dependencies.${modId}]]
 modId = "kotlinforforge"
 mandatory = true
-versionRange = "[${kotlinForgeVersion},)"
+versionRange = "[${kotlinForgeVersionMin},${kotlinForgeVersionMax}]"
 ordering = "NONE"
 side = "CLIENT"
 

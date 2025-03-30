@@ -27,7 +27,7 @@ loom {
         // different mod loaders, you can add them using the
         // `extraAccessWideners` property.
         // And then add them to the `mixinConfig` function.
-        mixinConfig("example.mixins.common.json")
+        mixinConfig("$modId.mixins.common.json")
     }
 }
 
