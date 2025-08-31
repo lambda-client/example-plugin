@@ -6,8 +6,8 @@
   "description": "${modDescription}",
   "authors": ["${modAuthors}"],
   "contact": {
-    "homepage": "",
-    "sources": ""
+    "homepage": "https://github.com/lambda-client/ExamplePlugin",
+    "sources": "https://github.com/lambda-client/ExamplePlugin"
   },
   "license": "GNU General Public License v3.0",
   "icon": "${modIcon}",
@@ -23,8 +23,9 @@
   "mixins": [
     "${modId}.mixins.common.json"
   ],
+  "accessWidener": "${modId}.accesswidener",
   "depends": {
-    "lambda": "${lambdaVersion}",
+    "lambda": ">=${lambdaVersion}",
     "fabricloader": ">=${fabricLoaderVersion}",
     "minecraft": "~${minecraftVersion}",
     "fabric-api": ">=${fabricApiVersion}+${minecraftVersion}",

@@ -108,20 +108,15 @@ dependencies {
     // Lambda (Do not touch)
     modImplementation("com.lambda:lambda:$lambdaVersion+$minecraftVersion")
 
-    // This is the library we use for reflections
-    // You most likely will not need to use it so,
-    // you can comment the line or remove it entirely.
+    // This is the library we use for reflections.
+    // If you need to use it then simply uncomment this line.
     //
-    // This library allows us to scan the classpath
-    // for classes.
+    // This library allows us to scan the classpath for classes.
     //
     // If you are new to programming or new to Java
     // you may want to read this article on the classpath:
     // https://medium.com/javarevisited/back-to-the-basics-of-java-part-1-classpath-47cf3f834ff
     implementation("io.github.classgraph:classgraph:${classGraphVersion}")
-
-    // Add mods to the mod jar
-    implementation("com.github.rfresh2:baritone-fabric:$minecraftVersion")
 
     // Finish the configuration
     setupConfigurations()
