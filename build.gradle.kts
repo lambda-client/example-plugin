@@ -57,7 +57,7 @@ loom {
 
     runs {
         all {
-            programArgs("--username", "Steve", "--uuid", "8667ba71b85a4004af54457a9734eed7", "--accessToken", "<TOKEN>")
+            programArgs("--username", "Steve", "--uuid", "8667ba71b85a4004af54457a9734eed7", "--accessToken", "****")
         }
     }
 }
