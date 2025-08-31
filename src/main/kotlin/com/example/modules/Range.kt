@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity
 object Range : Module(
     name = "Range",
     description = "Print all the entities in a range",
-    defaultTags = setOf(ModuleTag.WORLD),
+    tag = ModuleTag.PLAYER,
 ) {
     private val range by setting("Range", 10.0, 1.0..32.0, 1.0)
 

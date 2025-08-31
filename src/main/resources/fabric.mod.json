@@ -16,7 +16,7 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "com.example.fabric.ExampleFabric"
+        "value": "com.example.Example"
       }
     ]
   },

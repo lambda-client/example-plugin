@@ -9,10 +9,11 @@ import java.awt.Color
 object Messager : Module(
     name = "Messager",
     description = "A module that sends messages in the game",
-    defaultTags = setOf(ModuleTag.CLIENT),
+    tag = ModuleTag.CLIENT,
 ) {
     init {
         onEnable {
+            world.entityManager
             val text = buildText {
                 literal("Here is a fun video!")
                 clickEvent(ClickEvents.openUrl("https://www.youtube.com/watch?v=jRGrNDV2mKc")) {
