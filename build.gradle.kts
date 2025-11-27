@@ -39,6 +39,15 @@ version = modVersion
 
 base.archivesName = modId
 
+// We need to force it using lwjgl 3.3.3 because of 3.3.4 poor support for Wayland protocol
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.lwjgl") {
+            useVersion("3.3.3")
+        }
+    }
+}
+
 repositories {
     mavenLocal() // Allow the use of local repositories
     maven("https://maven.2b2t.vc/releases") // Baritone
@@ -156,6 +165,10 @@ tasks {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xcontext-parameters", "-Xconsistent-data-class-copy-visibility")
+    }
+
     jvmToolchain(21)
 }
 

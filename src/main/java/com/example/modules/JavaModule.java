@@ -1,19 +1,19 @@
 package com.example.modules;
 
 import com.lambda.config.settings.comparable.BooleanSetting;
+import com.lambda.config.settings.complex.Bind;
 import com.lambda.event.events.TickEvent;
 import com.lambda.event.listener.SafeListener;
 import com.lambda.module.Module;
 import com.lambda.module.tag.ModuleTag;
 import com.lambda.util.Communication;
-import com.lambda.util.KeyCode;
 import kotlin.Unit;
 import kotlin.jvm.JvmClassMappingKt;
 
 // HEY YOU! Yeah, YOU! Sick of Java’s boring, slow, and clunky syntax? Why not try Kotlin instead?
 public class JavaModule extends Module {
     public JavaModule() {
-        super("JavaModule", "Usage example of Java", ModuleTag.Companion.getCLIENT(), false, false, KeyCode.UNBOUND, false);
+        super("JavaModule", "Usage example of Java", ModuleTag.Companion.getCLIENT(), false, false, Bind.Companion.getEMPTY(), false);
     }
 
     BooleanSetting setting = setting("Version", true, "Print the Java version", () -> true);
