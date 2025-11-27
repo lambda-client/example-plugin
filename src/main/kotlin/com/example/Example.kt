@@ -16,6 +16,9 @@ object Example : ClientModInitializer {
 
     val LOG: Logger = LogManager.getLogger(SYMBOL)
 
-    // noop, the runtime classpath analyzer will load your modules, commands, etc
+    // You do not need to register modules or commands as the mod depends on lambda, they will loaded
+    // into the class path and Lambda will use ClassGraph to scan the class path and load the classes.
+    // See com/lambda/util/reflections/Reflections.kt:39
+    // Realistically, you could even make an addon that isn't even a minecraft mod.
     override fun onInitializeClient() = LOG.info("Plugin $MOD_NAME $VERSION initialized.")
 }

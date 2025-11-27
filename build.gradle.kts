@@ -14,6 +14,7 @@ val fabricApiVersion: String by project
 val kotlinFabricVersion: String by project
 val classGraphVersion: String by project
 val kotlinVersion: String by project
+val mavenType: String by project
 
 // The next lines are used to replace the version in the fabric.mod.json files
 // You most likely don't want to touch this
@@ -44,6 +45,9 @@ repositories {
     maven("https://jitpack.io") // KDiscordIPC
     mavenCentral()
 
+    if (mavenType == "snapshots") maven("https://maven.lambda-client.org/snapshots")
+    else maven("https://maven.lambda-client.org/releases")
+
     // Allow the use of local libraries
     flatDir {
         dirs(libs)
@@ -57,6 +61,8 @@ loom {
 
     runs {
         all {
+            // These arguments are used to play with an account in your development environment. Because Minecraft doesn't refresh your token for you,
+            // you will have to change this every 24 hours.
             programArgs("--username", "Steve", "--uuid", "8667ba71b85a4004af54457a9734eed7", "--accessToken", "****")
         }
     }
@@ -68,20 +74,24 @@ val shadowLib: Configuration by configurations.creating { isCanBeConsumed = fals
 val shadowMod: Configuration by configurations.creating { isCanBeConsumed = false }
 
 fun DependencyHandlerScope.setupConfigurations() {
+    // This configuration adds the dependency in the classpath and includes it in Fabric's jar-in-jar folder
     includeLib.dependencies.forEach {
         implementation(it)
         include(it)
     }
 
+    // This configuration adds the mod dependency in the classpath and includes it in Fabric's jar-in-jar folder
     includeMod.dependencies.forEach {
         modImplementation(it)
         include(it)
     }
 
+    // This configuration adds the dependency in the classpath and adds its content into the final jar
     shadowLib.dependencies.forEach {
         implementation(it)
     }
 
+    // This configuration adds the mod dependency in the classpath and adds its content into the final jar
     shadowMod.dependencies.forEach {
         modImplementation(it)
     }
@@ -97,7 +107,7 @@ dependencies {
     // Add Kotlin
     // If you wish to use additional Kotlin features, you can add them here
     // You do not need to include them in the final jar since we are using
-    // Kotlin mod loaders which already include them.
+    // Kotlin mod loaders which already includes them.
     // implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 
     // Fabric
@@ -105,8 +115,9 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion+$minecraftVersion")
     modImplementation("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion.$kotlinVersion")
 
-    // Lambda (Do not touch)
-    modImplementation("com.lambda:lambda:$lambdaVersion+$minecraftVersion")
+    // Lambda
+    if (mavenType == "snapshots") modImplementation("com.lambda:lambda:$lambdaVersion+$minecraftVersion-SNAPSHOT")
+    else modImplementation("com.lambda:lambda:$lambdaVersion+$minecraftVersion")
 
     // This is the library we use for reflections.
     // If you need to use it then simply uncomment this line.
@@ -116,7 +127,7 @@ dependencies {
     // If you are new to programming or new to Java
     // you may want to read this article on the classpath:
     // https://medium.com/javarevisited/back-to-the-basics-of-java-part-1-classpath-47cf3f834ff
-    implementation("io.github.classgraph:classgraph:${classGraphVersion}")
+    implementation("io.github.classgraph:classgraph:$classGraphVersion")
 
     // Finish the configuration
     setupConfigurations()
