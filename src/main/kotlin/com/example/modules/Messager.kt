@@ -13,10 +13,9 @@ object Messager : Module(
 ) {
     init {
         onEnable {
-            world.entityManager
             val text = buildText {
                 literal("Here is a fun video!")
-                clickEvent(ClickEvents.openUrl("https://www.youtube.com/watch?v=jRGrNDV2mKc")) {
+                clickEvent(ClickEvents.openUrl("https://youtu.be/h0UsrRaGMh4")) {
                     color(Color.GREEN) {
                         literal(" (Click me!)")
                     }
