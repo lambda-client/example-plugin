@@ -2,12 +2,10 @@ package com.example.modules
 
 import com.lambda.event.events.TickEvent
 import com.lambda.event.listener.SafeListener.Companion.listen
-import com.lambda.event.listener.SafeListener.Companion.listenOnce
+import com.lambda.interaction.managers.inventory.InventoryRequest.Companion.inventoryRequest
 import com.lambda.interaction.material.StackSelection.Companion.selectStack
-import com.lambda.interaction.request.inventory.InventoryRequest.Companion.inventoryRequest
 import com.lambda.module.Module
 import com.lambda.module.tag.ModuleTag
-import com.lambda.util.item.ItemStackUtils.inventoryIndex
 import com.lambda.util.item.ItemStackUtils.slotId
 import com.lambda.util.player.SlotUtils.hotbarAndStorage
 import net.minecraft.item.Items

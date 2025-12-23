@@ -27,10 +27,10 @@ val replacements = file("gradle.properties").inputStream().use { stream ->
 val libs = file("libs")
 
 plugins {
-    kotlin("jvm") version "2.2.0"
-    id("org.jetbrains.dokka") version "2.0.0"
-    id("fabric-loom") version "1.10-SNAPSHOT"
-    id("com.gradleup.shadow") version "9.0.0-rc1"
+    kotlin("jvm") version "2.3.0"
+    id("org.jetbrains.dokka") version "2.1.0"
+    id("fabric-loom") version "1.14-SNAPSHOT"
+    id("com.gradleup.shadow") version "9.3.0"
     id("maven-publish")
 }
 
