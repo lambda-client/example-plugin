@@ -7,7 +7,7 @@ import com.lambda.interaction.material.StackSelection.Companion.selectStack
 import com.lambda.module.Module
 import com.lambda.module.tag.ModuleTag
 import com.lambda.util.item.ItemStackUtils.slotId
-import com.lambda.util.player.SlotUtils.hotbarAndStorage
+import com.lambda.util.player.SlotUtils.hotbarAndInventoryStacks
 import net.minecraft.item.Items
 
 object InventoryExample : Module(
@@ -18,7 +18,7 @@ object InventoryExample : Module(
     init {
         listen<TickEvent.Pre> {
             val selector = selectStack { isItem(Items.AIR).not() }
-            val stacks = selector.filterStacks(player.hotbarAndStorage)
+            val stacks = selector.filterStacks(player.hotbarAndInventoryStacks)
 
             val first = stacks.getOrNull(0)?.slotId ?: return@listen
             val second = stacks.getOrNull(1)?.slotId ?: return@listen
