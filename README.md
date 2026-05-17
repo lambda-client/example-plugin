@@ -11,7 +11,7 @@ These resources include but are not limited to:
 - Various Minecraft objects for which they don't have defined lists (list of entity, etc.)
 
 If you know a little bit about classloaders and reflection, you will realize that as long as your class matches the signature \
-we are looking for, the resource will be found by the reflection tool and it will just work. \
+we are looking for, the resource will be found by the reflection tool and it will just work.
 
 ### Adding modules
 Create an object extending `com.lambda.module.Module`. \
