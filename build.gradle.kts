@@ -54,8 +54,8 @@ repositories {
     maven("https://jitpack.io") // KDiscordIPC
     mavenCentral()
 
-    if (mavenType == "snapshots") maven("https://maven.lambda-client.org/snapshots")
-    else maven("https://maven.lambda-client.org/releases")
+    maven("https://maven.lambda-client.org/snapshots")
+    maven("https://maven.lambda-client.org/releases")
 
     // Allow the use of local libraries
     flatDir {
@@ -111,7 +111,7 @@ dependencies {
     // https://medium.com/@nagendra.raja/understanding-configurations-and-dependencies-in-gradle-ad0827619501
 
     minecraft("com.mojang:minecraft:$minecraftVersion")
-    mappings("net.fabricmc:yarn:$minecraftVersion+$yarnMappings:v2")
+    mappings("net.fabricmc:yarn:$yarnMappings")
 
     // Add Kotlin
     // If you wish to use additional Kotlin features, you can add them here
@@ -121,12 +121,11 @@ dependencies {
 
     // Fabric
     modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion+$minecraftVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion.$kotlinVersion")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+    modImplementation("net.fabricmc:fabric-language-kotlin:$kotlinFabricVersion")
 
     // Lambda
-    if (mavenType == "snapshots") modImplementation("com.lambda:lambda:$lambdaVersion+$minecraftVersion-SNAPSHOT")
-    else modImplementation("com.lambda:lambda:$lambdaVersion+$minecraftVersion")
+    modImplementation("com.lambda:lambda:$lambdaVersion")
 
     // This is the library we use for reflections.
     // If you need to use it then simply uncomment this line.
